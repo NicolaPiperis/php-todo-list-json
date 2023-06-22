@@ -1,11 +1,35 @@
 <script>
   import axios from "axios";
   export default {
+    data() {
+      return{
+        todolist: [],
+        newTasks : [
+          task  ""
+        ]
+
+      }
+    },
+    methods: {
+
+      
+      onSubmit() {
+        const headers = {
+          headers: {"Content-Type": "multipart/form-data"}
+        };
+        const data = this.newTasks;
+        const url = "http://localhost/backend/postTask.php";
+
+        axios.post(url, data, headers)
+        .then(response => console.log("response", response))
+        .catch(error => console.error("error", error));
+      }
+    },
     mounted() {
-      axios.get("http://localhost/backend/")
+      axios.get("http://localhost/backend/index.php")
         .then(
           response => {
-            console.log(JASON.stringify(response))
+            this.todolist = response.data;
           }
         )
     }
@@ -21,13 +45,16 @@
     </h1>
 
     <div class="todo">
-
+        <ul>
+          <li v-for="(todoItem, listidx) in todolist" :key="listidx">
+          {{ todoItem }}</li>
+        </ul>
     </div>
 
-    <form>
+    <form @submit.prevent="onSubmit">
 
-      <input type="text">
-      <input type="submit">
+      <input type="text" id="task" v-model="newTasks">
+      <input type="submit" value="ADD TASK">
 
     </form>
     
@@ -36,6 +63,12 @@
 </template>
 
 <style>
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body{
   background-color: rgb(0, 0, 42);
   font-family: Arial, Helvetica, sans-serif;
@@ -68,6 +101,13 @@ input{
   border: none;
 }
 
+li{
+  height: 50px;
+  border-bottom: 1px solid black;
+  list-style: none;
+  font-size: 32px;
+  padding: 5px;
+}
 
 
 </style>

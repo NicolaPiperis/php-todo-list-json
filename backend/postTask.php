@@ -4,6 +4,6 @@
 
     header('Content-Type: application/json');
 
-    $todoListStr = file_get_contents("data.json");
-    echo $todoListStr;
+    $data = $_POST;
+    echo json_encode($data);
 ?>

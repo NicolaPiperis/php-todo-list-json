@@ -4,15 +4,12 @@
     data() {
       return{
         todolist: [],
-        newTasks : [
-          task  ""
-        ]
-
+        newTasks: {
+          task: ""
+        }
       }
     },
-    methods: {
-
-      
+    methods: {      
       onSubmit() {
         const headers = {
           headers: {"Content-Type": "multipart/form-data"}
@@ -20,9 +17,14 @@
         const data = this.newTasks;
         const url = "http://localhost/backend/postTask.php";
 
+        console.log("funziona on submit");
+
         axios.post(url, data, headers)
-        .then(response => console.log("response", response))
-        .catch(error => console.error("error", error));
+        .then(response => {
+          this.todolist = response.data;
+          this.newTasks.task = "";
+          }
+        )      
       }
     },
     mounted() {
@@ -47,13 +49,13 @@
     <div class="todo">
         <ul>
           <li v-for="(todoItem, listidx) in todolist" :key="listidx">
-          {{ todoItem }}</li>
+          {{ todoItem.task }}</li>
         </ul>
     </div>
 
     <form @submit.prevent="onSubmit">
 
-      <input type="text" id="task" v-model="newTasks">
+      <input type="text" id="task" v-model="newTasks.task">
       <input type="submit" value="ADD TASK">
 
     </form>

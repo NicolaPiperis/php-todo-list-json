@@ -4,6 +4,18 @@
 
     header('Content-Type: application/json');
 
-    $data = $_POST;
-    echo json_encode($data);
+    $newTask = $_POST;
+
+    $newTasksStr = file_get_contents("data.json");
+    $newTasks = json_decode($newTasksStr);
+
+    $newTasks[] = $newTask;
+
+    $newTasksStr = json_encode($newTasks);
+
+    file_put_contents("data.json", $newTasksStr);
+    echo $newTasksStr;
 ?>
+
+
+

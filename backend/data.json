@@ -1,8 +1,15 @@
-[
-    "html",
-    "css",
-    "javascript",
-    "vue",
-    "php",
-    "Mhanz"
-]
+[{
+    "task": "html"
+}, {
+    "task": "css"
+}, {
+    "task": "javascript"
+}, {
+    "task": "vue"
+}, {
+    "task": "php"
+}, {
+    "task": "c"
+}, {
+    "task": "c++"
+}]

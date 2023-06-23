@@ -11,18 +11,19 @@
     },
     methods: {      
       onSubmit() {
+        // trasformo dei dati necessari in variabili per ordine
         const headers = {
           headers: {"Content-Type": "multipart/form-data"}
         };
         const data = this.newTasks;
         const url = "http://localhost/backend/postTask.php";
 
-        console.log("funziona on submit");
-
+        // chiamata axios col post
         axios.post(url, data, headers)
+        // mi ritorna nel response ciò che ho scritto nel postTask.php
         .then(response => {
           this.todolist = response.data;
-          this.newTasks.task = "";
+          // this.newTasks = "";
           }
         )      
       }

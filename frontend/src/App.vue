@@ -5,12 +5,16 @@
       return{
         todolist: [],
         newTasks: {
-          task: ""
+          task: "",
+          done: false
         }
       }
     },
     methods: {      
       onSubmit() {
+
+        if(!this.newTasks.task) {return}
+
         // trasformo dei dati necessari in variabili per ordine
         const headers = {
           headers: {"Content-Type": "multipart/form-data"}
@@ -22,11 +26,35 @@
         axios.post(url, data, headers)
         // mi ritorna nel response ciò che ho scritto nel postTask.php
         .then(response => {
+          
           this.todolist = response.data;
           // this.newTasks = "";
           }
-        )      
-      }
+        )
+        this.newTasks.task = "";
+
+      },
+      changeDone() {
+        console.log("voglio cambiare il done")
+        if(this.newTasks.done) {
+          this.newTasks.done = false;
+        } else{
+          this.newTasks.done = true;
+        }
+      },
+      deleteTask(index) {
+      
+      const url = 'http://localhost/backend/delete.php';
+      const data = {"index": index};
+      const headers = {
+          headers: { 'Content-Type': 'multipart/form-data' } 
+      };
+
+      axios.post(url, data, headers)
+           .then(response => {
+            this.todolist = response.data;
+           });
+    }      
     },
     mounted() {
       axios.get("http://localhost/backend/index.php")
@@ -49,8 +77,18 @@
 
     <div class="todo">
         <ul>
-          <li v-for="(todoItem, listidx) in todolist" :key="listidx">
-          {{ todoItem.task }}</li>
+          <li v-for="(todoItem, listidx) in todolist" :key="listidx"
+          :class="(todoItem.done) ? 'true' : '' "
+          @click="changeDone"
+          >
+            {{ todoItem.task }}
+
+            <button type="button" @click="deleteTask(i)">
+              X
+            </button>
+
+          </li>
+
         </ul>
     </div>
 
@@ -90,6 +128,7 @@ h1{
   border-radius: 10px;
   background-color: white;
   margin: auto;
+  overflow:auto ;
 }
 
 form{
@@ -110,6 +149,14 @@ li{
   list-style: none;
   font-size: 32px;
   padding: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.true{
+  text-decoration: line-through;
 }
 
 
